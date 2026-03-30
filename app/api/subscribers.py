@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from typing import Optional
 from app.data.dummy_data import subscribers, devices_by_user
 
 router = APIRouter()
@@ -15,9 +16,23 @@ router = APIRouter()
 # - 참고: dummy_data.py의 subscribers 변수를 활용하세요.
 # =============================================================================
 @router.get("/subscribers")
-def get_subscribers():
-    # subscribers 리스트 전체를 반환
-    pass
+def get_subscribers(
+    search: Optional[str] = None,
+    plan: Optional[str] = None,
+    status: Optional[str] = None,
+):
+    result = subscribers
+
+    if search:
+        result = [s for s in result if search.lower() in s["name"].lower()]
+
+    if plan:
+        result = [s for s in result if s["plan"].lower() == plan.lower()]
+
+    if status:
+        result = [s for s in result if s["status"].lower() == status.lower()]
+
+    return result
 
 # =============================================================================
 # TODO [요구사항 #2]: GET /api/subscribers/{user_id}/devices
