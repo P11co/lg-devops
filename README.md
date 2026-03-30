@@ -3,19 +3,17 @@
 ## Prerequisites
 
 - Python 3.12+
-- [uv](https://docs.astral.sh/uv/)
 
 ## Setup
 
 ```bash
-uv venv
-uv pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Run
 
 ```bash
-uv run uvicorn app.main:app --reload
+uvicorn app.main:app --reload
 ```
 
 The app will be available at http://localhost:8000.
