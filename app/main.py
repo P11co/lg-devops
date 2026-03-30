@@ -1,22 +1,24 @@
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 from app.api import subscribers, devices
 
 app = FastAPI(title="webOS Subscription Service")
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
 
 app.include_router(subscribers.router, prefix="/api", tags=["Subscribers"])
 app.include_router(devices.router, prefix="/api", tags=["Devices"])
 
+_index_html = Path("app/templates/index.html").read_text()
+
 
 @app.get("/", response_class=HTMLResponse)
-def root(request: Request):
-    return templates.TemplateResponse(request, "index.html")
+def root():
+    return HTMLResponse(_index_html)
 
 
 @app.get("/health")
